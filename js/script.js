@@ -1,24 +1,43 @@
 // Arquivo JavaScript para interatividades
 
 // Scroll suave para navegação
-document.addEventListener('DOMContentLoaded', function() {
-    // Navegação suave
-    const navLinks = document.querySelectorAll('nav a[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth'
-                });
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contact-form");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const data = {
+            nome: form.nome.value,
+            email: form.email.value,
+            site: form.site.value
+        };
+
+        // Substitua pelo seu webhook real (ex: Make, Zapier, Power Automate)
+        const webhookUrl = "https://webhook.seuservico.com/endpoint";
+
+        fetch(webhookUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Cadastro enviado com sucesso!");
+                form.reset();
+            } else {
+                alert("Erro ao enviar. Tente novamente.");
             }
+        })
+        .catch(error => {
+            console.error("Erro no envio:", error);
+            alert("Erro ao enviar. Verifique sua conexão.");
         });
     });
+});
+
 
     // Validação simples do formulário
     const contactForm = document.querySelector('.contact-form');
